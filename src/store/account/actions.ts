@@ -2,6 +2,7 @@ import router from '../../router'
 import Axios from 'axios';
 
 export function login({ commit }) {
+    // Temporary user data
     let url = 'https://randomuser.me/api/';
     Axios.get(url).then(function (response) {
         let userData = {
