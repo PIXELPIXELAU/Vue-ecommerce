@@ -5,14 +5,14 @@
       <input type="number" v-model="quantity" class="form-control mb-2 mr-sm-2" />
     </div>
     <button
-      v-if="!isInCardProp"
-      @click.stop="addCart({product, quantity})"
+      v-if="!isInCartProp"
+      @click.stop="addCartItem({product, quantity})"
       type="button"
       class="btn btn-primary btn-lg btn-block col-9"
     >ADD TO CART</button>
     <button
       v-else
-      @click.stop="removeCart(product.id)"
+      @click.stop="editCartRemoveProduct(product)"
       type="button"
       class="btn btn-primary btn-lg btn-block col-9"
     >REMOVE FROM CART</button>
@@ -20,26 +20,29 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 export default {
   props: ["product"],
   data() {
     return {
-      isInCardProp: false,
+      isInCartProp: false,
       quantity: 1,
     };
   },
   computed: {
-    ...mapState("product", ["cart"]),
+    ...mapGetters("product", ["getCart"]),
   },
   methods: {
-    ...mapActions("product", ["addCart", "removeCart"]),
+    ...mapMutations("product", ["addCartItem", "editCartRemoveProduct"]),
 
     isInCart(id) {
-      for (let index = 0; index < this.cart.length; index++) {
-        const element = this.cart[index];
-        if (element.id === id) {
-          return true;
+      const cart = this.getCart
+      if(cart) {
+        for (let index = 0; index < cart.length; index++) {
+          const element = cart[index].product;
+          if (element.id === id) {
+            return true;
+          }
         }
       }
       return false;
@@ -47,15 +50,16 @@ export default {
   },
   watch: {
     product(val) {
-      this.isInCardProp = this.isInCart(val.id);
+      this.isInCartProp = this.isInCart(val.id);
     },
-    cart() {
-      this.isInCardProp = this.isInCart(this.product.id);
+    getCart() {
+      this.isInCartProp = this.isInCart(this.product.id);
     },
     quantity(val) {
       if (val <= 0) {
         this.quantity = 1;
       }
+      this.product.quantity = val
     },
   },
 };

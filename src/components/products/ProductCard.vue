@@ -1,6 +1,6 @@
 <template>
   <div class="card mb-4 shadow-sm">
-    <img :src="product.imageUrl" class="card-img-top product-image" />
+    <img :src="product.images[0]" class="card-img-top product-image" />
     <div class="card-body">
       <h5 class="card-title text-left">{{ product.name }}</h5>
       <div class="row">

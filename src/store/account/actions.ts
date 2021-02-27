@@ -1,21 +1,28 @@
-import router from '../../router'
-import Axios from 'axios';
+import { ActionTree } from 'vuex'
+import { Account, AccountState, RootState, CommitFunction } from '../types'
+import router from '@/router'
+import Axios, { AxiosError, AxiosResponse } from 'axios'
 
-export function login({ commit }) {
-    // Temporary user data
-    let url = 'https://randomuser.me/api/';
-    Axios.get(url).then(function (response) {
-        let userData = {
-            displayName: response.data.results[0].name.first,
-            email: response.data.results[0].email,
-            photoURL: response.data.results[0].picture.thumbnail,
-            uid: response.data.results[0].login.uuid
-        }
-
-        commit("setUserData", userData)
-        router.push('/')
-    })
-        .catch(function (error) {
-            console.log(error)
+export const actions: ActionTree<AccountState, RootState> = {
+    async login({ commit }: CommitFunction ) {
+        // Temporary user data
+        const url = 'https://randomuser.me/api/'
+        await Axios
+            .get(url)
+            .then((response: AxiosResponse) => {
+                const payload = {
+                    name: `${response.data.results[0].name.first} ${response.data.results[0].name.last}`,
+                    email: response.data.results[0].email,
+                    image: response.data.results[0].picture.thumbnail,
+                    uid: response.data.results[0].login.uuid,
+                    users: ['']
+                }
+                commit('setAccount', payload)
+                router.push('/')
+            })
+            .catch((error: AxiosError) => {
+                console.log('XHR error loading account data',error.message)
+                commit('setAccountError')
         });
+    }
 }

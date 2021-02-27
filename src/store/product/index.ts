@@ -1,12 +1,22 @@
-import state from './state'
-import * as getters from './getters'
-import * as mutations from './mutations'
-import * as actions from './actions'
+import { Module } from 'vuex'
+import { getters } from './getters'
+import { actions } from './actions'
+import { mutations } from './mutations'
+import { ProductState, RootState } from '../types'
 
-export default {
-  namespaced: true,
+export const state: ProductState = {
+  product: undefined,
+  list: undefined,
+  cart: undefined,
+  error: false
+}
+
+const namespaced: boolean = true
+
+export const product: Module<ProductState, RootState> = {
+  namespaced,
+  state,  
   getters,
-  mutations,
   actions,
-  state
+  mutations
 }

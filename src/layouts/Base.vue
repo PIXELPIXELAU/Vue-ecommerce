@@ -2,11 +2,11 @@
   <div>
     <div>
       <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-        <router-link class="navbar-brand" to="/">CS-eCommerce</router-link>
+        <router-link class="navbar-brand" to="/">PP-eCommerce</router-link>
         <div class="ml-auto">
-          <div v-if="user.photoURL">
+          <div v-if="getUser.image">
             <img
-              :src="user.photoURL"
+              :src="getUser.image"
               class="img-thumbnail profile-image"
               alt
             />
@@ -16,7 +16,7 @@
                 width="50"
                 alt
               />
-              <span class="badge badge-danger badge-pill">{{ cart.length }}</span>
+              <span v-if="cartCount" class="badge badge-danger badge-pill">{{ cartCount }}</span>
             </router-link>
           </div>
           <router-link v-else class="btn btn-primary my-2 my-sm-0" to="/login">Login</router-link>
@@ -34,8 +34,19 @@ import { mapGetters } from "vuex";
 export default {
   name: "Base",
   computed: {
-    ...mapGetters("account", ["user"]),
-    ...mapGetters("product", ["cart"])
+    ...mapGetters("account", ["getUser"]),
+    ...mapGetters("product", ["getCart"]),
+    cartCount() {
+      let count = 0
+      if (this.getCart.length) {
+        for (let index = 0;index < this.getCart.length; index++) {
+          count = count + (1*this.getCart[index].quantity)
+        }
+      }
+      return count
+    }
+  },
+  watch: {
   }
 };
 </script>

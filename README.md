@@ -1,4 +1,7 @@
-# cs-ecommerce
+# vue-ecommerce
+
+## Tutorial
+[https://codesource.io/building-an-e-commerce-app-with-vue-js-vuex-axios/]
 
 ## Project setup
 ```

@@ -1,19 +1,19 @@
 <template>
   <div class="container-fluid">
     <div class="row d-flex justify-content-center">
-      <div class="col-6">
+      <div v-if="hasImage" class="col-6">
         <div class="card text-left shadow-md">
-          <img class="card-img-top" :src="product.imageUrl" alt />
+          <img class="card-img-top" :src="getItem.images[0]" alt />
         </div>
       </div>
       <div class="col-6 text-left text-justify">
-        <div class="display-3">{{ product.name }}</div>
-        <p class="lead text-justify">{{ product.content }}</p>
+        <div class="display-3">{{ getItem.name }}</div>
+        <p class="lead text-justify">{{ getItem.description }}</p>
         <div>
           <p class="h3">Price</p>
-          <p class="h2">${{ product.price }}</p>
+          <p class="h2">${{ getItem.price }}</p>
         </div>
-        <AddToCart :product="product" v-if="user.uid" />
+        <AddToCart :product="getItem" v-if="getUser.uid" />
       </div>
     </div>
   </div>
@@ -29,15 +29,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters("account", ["user"]),
-    ...mapGetters("product", ["product"])
+    ...mapGetters("account", ["getUser"]),
+    ...mapGetters("product", ["getItem", "hasImage"])
   },
   components: { AddToCart },
   methods: {
-    ...mapActions("product", ["productDetails"]),
+    ...mapActions("product", ["getDetails"]),
   },
   mounted() {
-    this.productDetails(this.$route.params.idProduct);
+    this.getDetails(this.$route.params.idProduct);
   }
 };
 </script>
